@@ -1,17 +1,26 @@
-let numeroCartao = 1;
+;(function () {
 
-const criaCartaoInsereMural = function (dadosCartao) {
-    const cartao = document.createElement('article');
-    const mural = document.querySelector('.mural');
+    'use strict'
 
-    cartao.id = 'cartao_' + numeroCartao;
-    cartao.classList.add('cartao');
-    cartao.tabIndex = 0;
+    let numeroCartao = 1;
 
-    if(dadosCartao.cor){
-        cartao.style.backgroundColor = dadosCartao.cor;
-    }
-    cartao.innerHTML = `
+    const criaCartaoInsereMural = function (dadosCartao) {
+        const cartao = document.createElement('article');
+        const mural = document.querySelector('.mural');
+
+        cartao.id = 'cartao_' + numeroCartao;
+        cartao.classList.add('cartao');
+        cartao.tabIndex = 0;
+
+        if(dadosCartao.cor){
+            cartao.style.backgroundColor = dadosCartao.cor;
+        }
+
+        if(dadosCartao.classe){
+            cartao.classList.add(dadosCartao.classe);
+        }
+
+        cartao.innerHTML = `
                     <div class="opcoesDoCartao">
                 <button class="opcoesDoCartao-remove opcoesDoCartao-opcao">
                     <svg>
@@ -49,63 +58,68 @@ const criaCartaoInsereMural = function (dadosCartao) {
             </div>
             <p class="cartao-conteudo" contenteditable tabindex="0">${dadosCartao.conteudo}</p>
             `;
-    cartao.addEventListener('focusin', function () {
-        this.classList.add('cartao--focado')
-    });
-    cartao.addEventListener('focusout', function () {
-        if (this.classList.contains('cartao--focado')) {
-            this.classList.remove('cartao--focado')
-        }
-    });
-    cartao.addEventListener('change', function (event) {
-        const mudarCor = event.target.classList.contains('corCartao');
-        if (mudarCor) {
-            this.style.backgroundColor = event.target.value;
-        }
-    });
-
-    cartao.addEventListener('click', function (event) {
-        const remover = event.target.classList.contains('opcoesDoCartao-remove');
-        if (remover) {
-            const element = this;
-            element.classList.add('cartao--some');
-            element.addEventListener('transitioned', function () {
-                element.remove();
-            });
-        }
-    });
-
-
-    cartao.addEventListener('keyup', function (event) {
-        const mudarCor = event.target.classList.contains('opcoesDoCartao-tipo');
-        if (mudarCor) {
-            switch (event.code) {
-                case 'Enter':
-                case 'NumpadEnter':
-                case 'Space':
-                    //this.style.backgroundColor = event.target.style.color;
-                    event.target.click();
-                    break;
+        cartao.addEventListener('focusin', function () {
+            this.classList.add('cartao--focado')
+        });
+        cartao.addEventListener('focusout', function () {
+            if (this.classList.contains('cartao--focado')) {
+                this.classList.remove('cartao--focado')
             }
-        }
-        const remover = event.target.classList.contains('opcoesDoCartao-remove');
-        if (remover) {
-            switch (event.code) {
-                case 'Enter':
-                case 'NumpadEnter':
-                case 'Space':
-                    //this.style.backgroundColor = event.target.style.color;
-                    const element = this;
-                    element.classList.add('cartao--some');
-                    element.addEventListener('transitioned', function () {
-                        element.remove();
-                    });
-                    break;
+        });
+        cartao.addEventListener('change', function (event) {
+            const mudarCor = event.target.classList.contains('corCartao');
+            if (mudarCor) {
+                this.style.backgroundColor = event.target.value;
             }
+        });
 
-        }
-    });
-    mural.insertAdjacentElement('afterbegin', cartao);
+        cartao.addEventListener('click', function (event) {
+            const remover = event.target.classList.contains('opcoesDoCartao-remove');
 
-    numeroCartao++;
-}
+            if (remover) {
+                this.classList.add('cartao--some');
+
+                this.addEventListener('transitionend', function () {
+                    this.remove();
+                });
+            }
+        });
+
+
+        cartao.addEventListener('keyup', function (event) {
+            const mudarCor = event.target.classList.contains('opcoesDoCartao-tipo');
+            if (mudarCor) {
+                switch (event.code) {
+                    case 'Enter':
+                    case 'NumpadEnter':
+                    case 'Space':
+                        //this.style.backgroundColor = event.target.style.color;
+                        event.target.click();
+                        break;
+                }
+            }
+            const remover = event.target.classList.contains('opcoesDoCartao-remove');
+            if (remover) {
+                switch (event.code) {
+                    case 'Enter':
+                    case 'NumpadEnter':
+                    case 'Space':
+                        //this.style.backgroundColor = event.target.style.color;
+                        const element = this;
+                        element.classList.add('cartao--some');
+                        element.addEventListener('transitioned', function () {
+                            element.remove();
+                        });
+                        break;
+                }
+
+            }
+        });
+        mural.insertAdjacentElement('afterbegin', cartao);
+
+        numeroCartao++;
+    }
+
+    window.criaCartaoInsereMural = criaCartaoInsereMural;
+
+})();
