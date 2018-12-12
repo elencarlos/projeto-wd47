@@ -1,14 +1,15 @@
 ;(function () {
     const formulario = document.querySelector('.formNovoCartao');
     const textCartao = document.querySelector('.formNovoCartao-conteudo');
-    let numeroCartao = 1;
 
     formulario.addEventListener('submit',function (event) {
         event.preventDefault();
 
         if(textCartao.value.trim()){
-            criaCartaoInsereMural(numeroCartao, textCartao.value.trim());
-            numeroCartao++;
+            let dadosCartao = {
+                conteudo: textCartao.value.trim(),
+            }
+            criaCartaoInsereMural(dadosCartao);
             formulario.reset();
             textCartao.focus();
         }
