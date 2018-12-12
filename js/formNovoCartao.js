@@ -1,11 +1,16 @@
 ;(function () {
     const formulario = document.querySelector('.formNovoCartao');
     const textCartao = document.querySelector('.formNovoCartao-conteudo');
+    let numeroCartao = 1;
+
     formulario.addEventListener('submit',function (event) {
         event.preventDefault();
 
         if(textCartao.value.trim()){
-            console.log(textCartao.value);
+            criaCartaoInsereMural(numeroCartao, textCartao.value.trim());
+            numeroCartao++;
+            formulario.reset();
+            textCartao.focus();
         }
         else{
             const temMsg = formulario.querySelector('.formNovoCartao-msg');
